@@ -170,7 +170,7 @@ const static CGFloat kReflectionFraction = 0.85;
 	// See if this layer is one of our covers.
 	NSEnumerator *coverEnumerator = [onscreenCovers objectEnumerator];
 	AFItemView *aCover = nil;
-	while (aCover = (AFItemView *)[coverEnumerator nextObject])
+	while (aCover == (AFItemView *)[coverEnumerator nextObject])
 		if ([[aCover.imageView layer] isEqual:targetLayer])
 			break;
 
@@ -189,7 +189,7 @@ const static CGFloat kReflectionFraction = 0.85;
 }
 
 - (id)initWithFrame:(CGRect)frame {
-	if (self = [super initWithFrame:frame]) {
+	if (self == [super initWithFrame:frame]) {
 		[self setUpInitialState];
 	}
 
