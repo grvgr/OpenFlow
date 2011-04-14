@@ -26,19 +26,30 @@
 
 
 @interface AFItemView : UIView {
+    
+    UILabel			*flipView;
 	UIImageView		*imageView;
 	int				number;
 	CGFloat			horizontalPosition;
 	CGFloat			verticalPosition;
 	CGFloat			originalImageHeight;
+	BOOL			selected;
+	BOOL			flipped;
+	CGFloat			viewImageHeight;
+	CGFloat			viewImageWidth;
 }
 
 @property int number;
-@property (nonatomic, readonly) CGFloat horizontalPosition;
-@property (nonatomic, readonly) CGFloat verticalPosition;
+@property BOOL selected;
+@property BOOL flipped;
+@property (nonatomic, readonly) CGFloat horizontalPosition, verticalPosition;
 @property (nonatomic, readonly) UIImageView *imageView;
+
 
 - (void)setImage:(UIImage *)newImage originalImageHeight:(CGFloat)imageHeight reflectionFraction:(CGFloat)reflectionFraction;
 - (CGSize)calculateNewSize:(CGSize)originalImageSize boundingBox:(CGSize)boundingBox;
+- (void)flipView;
+- (BOOL)createFlipView;
+- (void)revertFlip;
 
 @end

@@ -44,13 +44,23 @@
 
 - (void)awakeFromNib {
 	loadImagesOperationQueue = [[NSOperationQueue alloc] init];
-	UIAlertView *openFlowImageSourceAlertView = [[UIAlertView alloc] initWithTitle:@"OpenFlow Demo Data Source"
-																		   message:@"Would you like to download images from Flickr or use 30 sample images included with this project?"
-																		  delegate:self
-																 cancelButtonTitle:@"Flickr"
-																 otherButtonTitles:@"Samples (all at once)", @"Samples (NSThread)", nil];
-	[openFlowImageSourceAlertView show];
-	[openFlowImageSourceAlertView release];
+    
+    NSString *imageName;
+    for (int i=0; i < 30; i++) {
+        imageName = [[NSString alloc] initWithFormat:@"%d.jpg", i];
+        [(AFOpenFlowView *)self.view setImage:[UIImage imageNamed:imageName] forIndex:i];
+        [imageName release];
+    }
+
+    [(AFOpenFlowView *)self.view setNumberOfImages:30];
+    
+//	UIAlertView *openFlowImageSourceAlertView = [[UIAlertView alloc] initWithTitle:@"OpenFlow Demo Data Source"
+//																		   message:@"Would you like to download images from Flickr or use 30 sample images included with this project?"
+//																		  delegate:self
+//																 cancelButtonTitle:@"Flickr"
+//																 otherButtonTitles:@"Samples (all at once)", @"Samples (NSThread)", nil];
+//	[openFlowImageSourceAlertView show];
+//	[openFlowImageSourceAlertView release];
 }
 
 - (void)flickrAPIRequest:(OFFlickrAPIRequest *)inRequest didCompleteWithResponse:(NSDictionary *)inResponseDictionary {
@@ -163,15 +173,15 @@
 }
 - (void)openFlowView:(AFOpenFlowView *)openFlowView didTap:(int)index {
 
-  UILabel *flipView = [[UILabel alloc] init];
-  flipView.text = @"O hai";
-  flipView.backgroundColor = [UIColor cyanColor];
-  flipView.textAlignment = UITextAlignmentCenter;
-  CGRect newFrame = openFlowView.selectedCoverView.frame;
-  newFrame.size.height = 250;
-  newFrame.size.width = 250;
-  flipView.frame = newFrame;
+    UILabel *flipView = [[UILabel alloc] init];
+//  flipView.text = @"O hai";
+//  flipView.backgroundColor = [UIColor cyanColor];
+//  flipView.textAlignment = UITextAlignmentCenter;
+//  CGRect newFrame = openFlowView.selectedCoverView.frame;
+//  newFrame.size.height = 250;
+//  newFrame.size.width = 250;
+//  flipView.frame = newFrame;
   [openFlowView flipSelectedToView:flipView];
-  [flipView release];
+//  [flipView release];
 }
 @end

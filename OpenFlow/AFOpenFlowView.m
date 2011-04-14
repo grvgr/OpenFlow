@@ -361,6 +361,7 @@ const static CGFloat kReflectionFraction = 0.85;
 	if (selectedCoverView && (newSelectedCover == selectedCoverView.number))
 		return;
 
+	
 	AFItemView *cover;
 	int newLowerBound = MAX(0, newSelectedCover - COVER_BUFFER);
 	int newUpperBound = MIN(self.numberOfImages - 1, newSelectedCover + COVER_BUFFER);
@@ -481,66 +482,71 @@ const static CGFloat kReflectionFraction = 0.85;
 }
 
 - (void)flipSelectedToView:(UIView *)flipsideView {
-	// Save selected view state before animation
+	
+	[selectedCoverView flipView];
 	flipViewShown = [[NSMutableDictionary alloc] init];
-	[flipViewShown setValue:selectedCoverView.imageView forKey:@"imageView"];
-	[flipViewShown setValue:flipsideView forKey:@"flipsideView"];
-
-	CGRect flippedViewFrame = CGRectMake(
-										 (flippedContainerView.frame.size.width-flipsideView.frame.size.width)/2,
-										 (flippedContainerView.frame.size.height-flipsideView.frame.size.height)/2,
-										 flipsideView.frame.size.width,
-										 flipsideView.frame.size.height);
-	flipsideView.frame = flippedViewFrame;
-
-	double animationDuration = 0.8;
-
-	// Animate flip of open flow image out of view
-	[UIView beginAnimations:nil context:NULL];
-	[UIView setAnimationDuration:animationDuration];
-	[UIView setAnimationTransition:UIViewAnimationTransitionFlipFromLeft
-						   forView:selectedCoverView
-							 cache:YES];
-	[selectedCoverView.imageView removeFromSuperview];
-	[UIView commitAnimations];
-
-	// Animate flip of flipped view into view
-	[UIView beginAnimations:nil context:NULL];
-	[UIView setAnimationDuration:animationDuration];
-	[UIView setAnimationTransition:UIViewAnimationTransitionFlipFromLeft
-						   forView:flippedContainerView
-							 cache:YES];
-	[flippedContainerView addSubview:flipsideView];
-	[UIView commitAnimations];
+	// Save selected view state before animation
+//	flipViewShown = [[NSMutableDictionary alloc] init];
+	[flipViewShown setValue:selectedCoverView forKey:@"imageView"];
+//	[flipViewShown setValue:flipsideView forKey:@"flipsideView"];
+//
+//	CGRect flippedViewFrame = CGRectMake(
+//										 (flippedContainerView.frame.size.width-flipsideView.frame.size.width)/2,
+//										 (flippedContainerView.frame.size.height-flipsideView.frame.size.height)/2,
+//										 flipsideView.frame.size.width,
+//										 flipsideView.frame.size.height);
+//	flipsideView.frame = flippedViewFrame;
+//
+//	double animationDuration = 0.8;
+//
+//	// Animate flip of open flow image out of view
+//	[UIView beginAnimations:nil context:NULL];
+//	[UIView setAnimationDuration:animationDuration];
+//	[UIView setAnimationTransition:UIViewAnimationTransitionFlipFromLeft
+//						   forView:selectedCoverView
+//							 cache:YES];
+//	[selectedCoverView.imageView removeFromSuperview];
+//	[UIView commitAnimations];
+//
+//	// Animate flip of flipped view into view
+//	[UIView beginAnimations:nil context:NULL];
+//	[UIView setAnimationDuration:animationDuration];
+//	[UIView setAnimationTransition:UIViewAnimationTransitionFlipFromLeft
+//						   forView:flippedContainerView
+//							 cache:YES];
+//	[flippedContainerView addSubview:flipsideView];
+//	[UIView commitAnimations];
 
 }
 
 - (void)dismissFlippedSelection {
-	UIImageView *restoredImageView = [flipViewShown valueForKey:@"imageView"];
-	UIView *flipsideView = [flipViewShown valueForKey:@"flipsideView"];
+	AFItemView *restoredImageView = [flipViewShown valueForKey:@"imageView"];
+	[restoredImageView flipView];
+//	UIView *flipsideView = [flipViewShown valueForKey:@"flipsideView"];
+//
+//	double animationDuration = 0.8;
+//
+//	// Animate flip of flipped view out of view
+//	[UIView beginAnimations:nil context:NULL];
+//	[UIView setAnimationDuration:animationDuration];
+//	[UIView setAnimationTransition:UIViewAnimationTransitionFlipFromRight
+//						   forView:flippedContainerView
+//							 cache:YES];
+//	[flipsideView removeFromSuperview];
+//	[UIView commitAnimations];
+//
+//	// Animate flip of image view back into view
+//	[UIView beginAnimations:nil context:NULL];
+//	[UIView setAnimationDuration:animationDuration];
+//	[UIView setAnimationTransition:UIViewAnimationTransitionFlipFromRight
+//						   forView:selectedCoverView
+//							 cache:YES];
+//	[selectedCoverView addSubview:restoredImageView];
+//	[UIView setAnimationDelegate:self];
+//	[UIView setAnimationDidStopSelector:@selector(dismissFlippedAnimationDidStop:finished:context:)];
+//	[UIView commitAnimations];
 
-	double animationDuration = 0.8;
-
-	// Animate flip of flipped view out of view
-	[UIView beginAnimations:nil context:NULL];
-	[UIView setAnimationDuration:animationDuration];
-	[UIView setAnimationTransition:UIViewAnimationTransitionFlipFromRight
-						   forView:flippedContainerView
-							 cache:YES];
-	[flipsideView removeFromSuperview];
-	[UIView commitAnimations];
-
-	// Animate flip of image view back into view
-	[UIView beginAnimations:nil context:NULL];
-	[UIView setAnimationDuration:animationDuration];
-	[UIView setAnimationTransition:UIViewAnimationTransitionFlipFromRight
-						   forView:selectedCoverView
-							 cache:YES];
-	[selectedCoverView addSubview:restoredImageView];
-	[UIView setAnimationDelegate:self];
-	[UIView setAnimationDidStopSelector:@selector(dismissFlippedAnimationDidStop:finished:context:)];
-	[UIView commitAnimations];
-
+	
 	flipViewShown = nil;
 }
 
