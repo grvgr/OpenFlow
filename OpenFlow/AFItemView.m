@@ -28,7 +28,7 @@
 
 
 @implementation AFItemView
-@synthesize number, imageView, horizontalPosition, verticalPosition, flipped, selected;
+@synthesize number, frontView, horizontalPosition, verticalPosition, flipped, selected;
 
 - (id)initWithFrame:(CGRect)frame {
 	if (self == [super initWithFrame:frame]) {
@@ -38,9 +38,9 @@
 		horizontalPosition = 0;
 		
 			// Image View
-		imageView = [[UIImageView alloc] initWithFrame:frame];
-		imageView.opaque = YES;
-		[self addSubview:imageView];
+		frontView = [[UIImageView alloc] initWithFrame:frame];
+		frontView.opaque = YES;
+		[self addSubview:frontView];
 		flipped = FALSE;
 	}
 	
@@ -48,7 +48,7 @@
 }
 
 - (void)setImage:(UIImage *)newImage originalImageHeight:(CGFloat)imageHeight reflectionFraction:(CGFloat)reflectionFraction {
-	[imageView setImage:newImage];
+	[frontView setImage:newImage];
 	verticalPosition = imageHeight * reflectionFraction / 2;
 	originalImageHeight = imageHeight;
 	self.frame = CGRectMake(0, 0, newImage.size.width, newImage.size.height);
@@ -82,27 +82,27 @@
 
 - (void)setFrame:(CGRect)newFrame {
 	[super setFrame:newFrame];
-	[imageView setFrame:newFrame];
+	[frontView setFrame:newFrame];
 }
 
 - (void)dealloc {
-	[imageView release];
+	[frontView release];
 	
 	[super dealloc];
 }
 
 #pragma mark create_image_details
 
-- (BOOL) createFlipView
+- (BOOL) createbackView
 {
-	flipView = [[UILabel alloc] init];
-	flipView.text = @"O hai";
-	flipView.backgroundColor = [UIColor cyanColor];
-	flipView.textAlignment = UITextAlignmentCenter;
+	backView = [[UILabel alloc] init];
+	[backView setText:@"O hai"];
+	backView.backgroundColor = [UIColor cyanColor];
+	[backView setTextAlignment:UITextAlignmentCenter];
 	CGRect newFrame = self.superview.frame;
 	newFrame.size.height = viewImageHeight;
 	newFrame.size.width = viewImageWidth;
-	flipView.frame = newFrame;
+	backView.frame = newFrame;
 	return TRUE;
 }
 
@@ -118,14 +118,14 @@
 - (void)flipView
 {
 	
-	if ( flipped == FALSE  && [self createFlipView])
+	if ( flipped == FALSE  && [self createbackView])
 	{	
 //			//CGRect flippedViewFrame = CGRectMake(
-//											 (flipView.frame.size.width-imageView.frame.size.width)/2,
-//											 (flipView.frame.size.height-imageView.frame.size.height)/2,
-//											 imageView.frame.size.width,
-//											 imageView.frame.size.height);
-			//imageView.frame = flippedViewFrame;
+//											 (backView.frame.size.width-frontView.frame.size.width)/2,
+//											 (backView.frame.size.height-frontView.frame.size.height)/2,
+//											 frontView.frame.size.width,
+//											 frontView.frame.size.height);
+			//frontView.frame = flippedViewFrame;
 		
 		
 		
@@ -137,7 +137,7 @@
 		[UIView setAnimationTransition:UIViewAnimationTransitionFlipFromLeft
 							   forView:self
 								 cache:YES];
-		[imageView removeFromSuperview];
+		[frontView removeFromSuperview];
 		[UIView commitAnimations];
 		
 		
@@ -148,7 +148,7 @@
 		[UIView setAnimationTransition:UIViewAnimationTransitionFlipFromLeft
 							   forView:self
 								 cache:YES];
-		[self addSubview:flipView];
+		[self addSubview:backView];
 		[UIView commitAnimations];
 		flipped = TRUE;
 	}
@@ -163,7 +163,7 @@
 		[UIView setAnimationTransition:UIViewAnimationTransitionFlipFromRight
 							   forView:self
 								 cache:YES];
-		[flipView removeFromSuperview];
+		[backView removeFromSuperview];
 		[UIView commitAnimations];
 		
 			// Animate flip of image view back into view
@@ -172,14 +172,14 @@
 		[UIView setAnimationTransition:UIViewAnimationTransitionFlipFromRight
 							   forView:self
 								 cache:YES];
-		[self addSubview:imageView];
+		[self addSubview:frontView];
 		[UIView setAnimationDelegate:self.superview];
 		[UIView setAnimationDidStopSelector:@selector(dismissFlippedAnimationDidStop:finished:context:)];
 		[UIView commitAnimations];
 		
 		flipped = FALSE;
-		[flipView release];
-		flipView = nil;
+		[backView release];
+		backView = nil;
 	}
 	
 	

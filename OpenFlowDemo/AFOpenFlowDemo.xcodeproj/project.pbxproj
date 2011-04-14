@@ -283,7 +283,7 @@
 		86E5B32C1025291B0044EE2C /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				86E5B3321025291B0044EE2C /* ObjectiveFlickr.framework */,
+				86E5B3321025291B0044EE2C /* ObjectiveFlickr */,
 				86E5B3341025291B0044EE2C /* libObjectiveFlickr.a */,
 			);
 			name = Products;
@@ -338,10 +338,10 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		86E5B3321025291B0044EE2C /* ObjectiveFlickr.framework */ = {
+		86E5B3321025291B0044EE2C /* ObjectiveFlickr */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
-			path = ObjectiveFlickr.framework;
+			path = ObjectiveFlickr;
 			remoteRef = 86E5B3311025291B0044EE2C /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};

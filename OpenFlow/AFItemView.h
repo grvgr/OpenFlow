@@ -27,8 +27,8 @@
 
 @interface AFItemView : UIView {
     
-    UILabel			*flipView;
-	UIImageView		*imageView;
+    UIView			*backView;
+	UIView			*frontView;
 	int				number;
 	CGFloat			horizontalPosition;
 	CGFloat			verticalPosition;
@@ -43,13 +43,13 @@
 @property BOOL selected;
 @property BOOL flipped;
 @property (nonatomic, readonly) CGFloat horizontalPosition, verticalPosition;
-@property (nonatomic, readonly) UIImageView *imageView;
+@property (nonatomic, readonly) UIView *frontView;
 
 
 - (void)setImage:(UIImage *)newImage originalImageHeight:(CGFloat)imageHeight reflectionFraction:(CGFloat)reflectionFraction;
 - (CGSize)calculateNewSize:(CGSize)originalImageSize boundingBox:(CGSize)boundingBox;
 - (void)flipView;
-- (BOOL)createFlipView;
+- (BOOL)createbackView;
 - (void)revertFlip;
 
 @end

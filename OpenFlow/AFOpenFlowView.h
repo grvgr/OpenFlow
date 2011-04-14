@@ -72,7 +72,7 @@
 - (void)setSelectedCover:(int)newSelectedCover;
 - (void)centerOnSelectedCover:(BOOL)animated;
 - (void)setImage:(UIImage *)image forIndex:(int)index;
-- (void)flipSelectedToView:(UIView *)flipsideView;
+- (void)flipSelectedToView;
 - (void)dismissFlippedSelection;
 
 @end

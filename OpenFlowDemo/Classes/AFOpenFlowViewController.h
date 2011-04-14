@@ -27,7 +27,7 @@
 #import "ObjectiveFlickr.h"
 
 
-@interface AFOpenFlowViewController : UIViewController <AFOpenFlowViewDataSource, AFOpenFlowViewDelegate, OFFlickrAPIRequestDelegate> {
+@interface AFOpenFlowViewController : UIViewController <AFOpenFlowViewDataSource, OFFlickrAPIRequestDelegate> {
 	NSArray *coverImageData;
 	OFFlickrAPIContext *flickrContext;
 	OFFlickrAPIRequest *interestingnessRequest;

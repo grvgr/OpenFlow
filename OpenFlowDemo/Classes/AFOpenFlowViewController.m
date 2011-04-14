@@ -46,6 +46,13 @@
 	loadImagesOperationQueue = [[NSOperationQueue alloc] init];
     
     NSString *imageName;
+	
+		// Create afitem view with two views inside 
+		// AfItemView * afItemView = [[AfItemView alloc] initWithFront:frontView initWithBackView:backView]
+		// 
+		// assign those views to afflowview
+		// [self.view addAfItemView:afItemView];
+	
     for (int i=0; i < 30; i++) {
         imageName = [[NSString alloc] initWithFormat:@"%d.jpg", i];
         [(AFOpenFlowView *)self.view setImage:[UIImage imageNamed:imageName] forIndex:i];
@@ -168,12 +175,10 @@
 	[getImageOperation release];
 }
 
-- (void)openFlowView:(AFOpenFlowView *)openFlowView selectionDidChange:(int)index {
-	NSLog(@"Cover Flow selection did change to %d", index);
-}
-- (void)openFlowView:(AFOpenFlowView *)openFlowView didTap:(int)index {
-
-    UILabel *flipView = [[UILabel alloc] init];
+//- (void)openFlowView:(AFOpenFlowView *)openFlowView selectionDidChange:(int)index {
+//	NSLog(@"Cover Flow selection did change to %d", index);
+//}
+//- (void)openFlowView:(AFOpenFlowView *)openFlowView didTap:(int)index {
 //  flipView.text = @"O hai";
 //  flipView.backgroundColor = [UIColor cyanColor];
 //  flipView.textAlignment = UITextAlignmentCenter;
@@ -181,7 +186,7 @@
 //  newFrame.size.height = 250;
 //  newFrame.size.width = 250;
 //  flipView.frame = newFrame;
-  [openFlowView flipSelectedToView:flipView];
+//  [openFlowView flipSelectedToView];
 //  [flipView release];
-}
+//}
 @end
