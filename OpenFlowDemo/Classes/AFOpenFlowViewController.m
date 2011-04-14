@@ -42,6 +42,34 @@
     [super dealloc];
 }
 
+// building front and back views
+#pragma mark building ui views
+
+- (UIView *)buildFrontImageView:(UIImage *)image 
+{
+	
+	
+
+	
+}
+- (UIView *)buildBackDetailsView 
+{
+	
+	UILabel * backView = [[UILabel alloc] init];
+	[backView setText:@"O hai"];
+	backView.backgroundColor = [UIColor cyanColor];
+	[backView setTextAlignment:UITextAlignmentCenter];
+	CGRect newFrame = self.view.frame;
+	newFrame.size.height = 250;
+	newFrame.size.width = 250;
+	backView.frame = newFrame;
+	return backView;
+
+	
+}
+
+
+
 - (void)awakeFromNib {
 	loadImagesOperationQueue = [[NSOperationQueue alloc] init];
     

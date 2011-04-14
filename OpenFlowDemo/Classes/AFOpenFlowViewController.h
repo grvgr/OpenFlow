@@ -37,5 +37,7 @@
 
 - (void)imageDidLoad:(NSArray *)arguments;
 - (IBAction)infoButtonPressed:(id)sender;
+- (UIView *)buildFrontImageView:(UIImage *)image;
+- (UIView *)buildBackDetailsView;
 
 @end
