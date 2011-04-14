@@ -23,7 +23,12 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-// For OpenFlow
+// For coverflow view
+//#define COVER_SPACING 40
+//#define CENTER_COVER_OFFSET 70	 	
+//#define SIDE_COVER_ANGLE .79
+
+// For Flat view
 #define COVER_SPACING 250
 #define CENTER_COVER_OFFSET 100
 #define SIDE_COVER_ANGLE 0
