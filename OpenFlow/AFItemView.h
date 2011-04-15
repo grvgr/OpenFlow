@@ -23,6 +23,7 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 #import <UIKit/UIKit.h>
+#import "AFViewItem.h"
 
 
 @interface AFItemView : UIView {
@@ -37,6 +38,10 @@
 	BOOL			flipped;
 	CGFloat			viewImageHeight;
 	CGFloat			viewImageWidth;
+	
+	//View item pointer for this view, this view item 
+	//Provides implementation for front and back views
+	AFViewItem		*viewItem;
 }
 
 @property int number;
@@ -51,5 +56,6 @@
 - (void)flipView;
 - (BOOL)createbackView;
 - (void)revertFlip;
+- (void)updateViewItemAndUpdateImage:(AFViewItem *) newViewItem;
 
 @end

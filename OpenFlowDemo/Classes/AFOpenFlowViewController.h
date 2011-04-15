@@ -24,20 +24,16 @@
  */
 #import <UIKit/UIKit.h>
 #import "AFOpenFlowView.h"
-#import "ObjectiveFlickr.h"
 
 
-@interface AFOpenFlowViewController : UIViewController <AFOpenFlowViewDataSource, OFFlickrAPIRequestDelegate> {
+
+@interface AFOpenFlowViewController : UIViewController <AFOpenFlowViewDataSource> {
 	NSArray *coverImageData;
-	OFFlickrAPIContext *flickrContext;
-	OFFlickrAPIRequest *interestingnessRequest;
-	NSDictionary *interestingPhotosDictionary;
 	NSOperationQueue *loadImagesOperationQueue;
 }
 
 - (void)imageDidLoad:(NSArray *)arguments;
 - (IBAction)infoButtonPressed:(id)sender;
-- (UIView *)buildFrontImageView:(UIImage *)image;
-- (UIView *)buildBackDetailsView;
+
 
 @end

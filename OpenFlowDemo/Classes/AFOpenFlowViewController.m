@@ -26,47 +26,17 @@
 #import "UIImageExtras.h"
 #import "AFGetImageOperation.h"
 
+#import "AfViewItem.h"
+#import "AFDemoViewItem.h"
+
 
 @implementation AFOpenFlowViewController
 
-//#error Change theses values to your Flickr API key & secret
-#define flickrAPIKey @"MYAPIKEY"
-#define flickrAPISecret @"MYAPISECRET"
-
 - (void)dealloc {
 	[loadImagesOperationQueue release];
-	[interestingPhotosDictionary release];
-	[flickrContext release];
-	[interestingnessRequest release];
-
     [super dealloc];
 }
 
-// building front and back views
-#pragma mark building ui views
-
-- (UIView *)buildFrontImageView:(UIImage *)image 
-{
-	
-	
-
-	
-}
-- (UIView *)buildBackDetailsView 
-{
-	
-	UILabel * backView = [[UILabel alloc] init];
-	[backView setText:@"O hai"];
-	backView.backgroundColor = [UIColor cyanColor];
-	[backView setTextAlignment:UITextAlignmentCenter];
-	CGRect newFrame = self.view.frame;
-	newFrame.size.height = 250;
-	newFrame.size.width = 250;
-	backView.frame = newFrame;
-	return backView;
-
-	
-}
 
 
 
@@ -74,54 +44,34 @@
 	loadImagesOperationQueue = [[NSOperationQueue alloc] init];
     
     NSString *imageName;
+	AFDemoViewItem *demoViewItem;
 	
-		// Create afitem view with two views inside 
-		// AfItemView * afItemView = [[AfItemView alloc] initWithFront:frontView initWithBackView:backView]
-		// 
-		// assign those views to afflowview
-		// [self.view addAfItemView:afItemView];
+	//Replace setImage with setViewItem
+	//AFViewItem to provide implementation for front and back views
 	
     for (int i=0; i < 30; i++) {
         imageName = [[NSString alloc] initWithFormat:@"%d.jpg", i];
         [(AFOpenFlowView *)self.view setImage:[UIImage imageNamed:imageName] forIndex:i];
         [imageName release];
+		
+		// Setting AFItem in AFOpenFlowView
+		demoViewItem = [[[AFDemoViewItem alloc] initWithString:imageName andInt:i] retain];
+		[(AFOpenFlowView*)self.view setViewItem: demoViewItem forIndex: i];
+			//[demoViewItem release];
     }
+	
+	
+
 
     [(AFOpenFlowView *)self.view setNumberOfImages:30];
     
-//	UIAlertView *openFlowImageSourceAlertView = [[UIAlertView alloc] initWithTitle:@"OpenFlow Demo Data Source"
-//																		   message:@"Would you like to download images from Flickr or use 30 sample images included with this project?"
-//																		  delegate:self
-//																 cancelButtonTitle:@"Flickr"
-//																 otherButtonTitles:@"Samples (all at once)", @"Samples (NSThread)", nil];
-//	[openFlowImageSourceAlertView show];
-//	[openFlowImageSourceAlertView release];
 }
 
-- (void)flickrAPIRequest:(OFFlickrAPIRequest *)inRequest didCompleteWithResponse:(NSDictionary *)inResponseDictionary {
-	// Hold onto the response dictionary.
-	interestingPhotosDictionary = [inResponseDictionary retain];
-	int numberOfImages = [[inResponseDictionary valueForKeyPath:@"photos.photo"] count];
-	[(AFOpenFlowView *)self.view setNumberOfImages:numberOfImages];
-}
 
-- (void)flickrAPIRequest:(OFFlickrAPIRequest *)inRequest didFailWithError:(NSError *)inError {
-	NSLog(@"Flickr API request failed with error: %@", [inError description]);
-	UIAlertView *flickrErrorAlertView = [[UIAlertView alloc] initWithTitle:@"Flickr API Error"
-																   message:[inError description]
-																  delegate:self
-														 cancelButtonTitle:@"Quit"
-														 otherButtonTitles:@"Retry", nil];
-	[flickrErrorAlertView show];
-	[flickrErrorAlertView release];
-}
 
 - (IBAction)infoButtonPressed:(id)sender {
 	NSString *alertString;
-	if (interestingnessRequest)
-		alertString = @"Many thanks to Lukhnos D. Liu's ObjectiveFlickr library for making it easy to access Flickr's 'Interestingness' photo stream.";
-	else
-		alertString = @"Sample images included in this project are all in the public domain, courtesy of NASA.";
+	alertString = @"Sample images included in this project are all in the public domain, courtesy of NASA.";
 	UIAlertView *infoAlertPanel = [[UIAlertView alloc] initWithTitle:@"OpenFlow Demo App"
 															 message:[NSString stringWithFormat:@"%@\n\nFor more info about the OpenFlow API, visit apparentlogic.com.", alertString]
 															delegate:nil
@@ -131,53 +81,12 @@
 	[infoAlertPanel release];
 }
 
-- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
-	if ([[alertView title] isEqualToString:@"Flickr API Error"]) {
-		if (buttonIndex == 0) {
-			// Exit
-			exit(-1);
-		} else if (buttonIndex == 1) {
-			// Retry
-			[interestingnessRequest callAPIMethodWithGET:@"flickr.interestingness.getList" arguments:nil];
-		}
-	} else {
-		// Assume we're in the initial alert view.
-		if (buttonIndex == 0) {
-			UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Disabled" message:@"Use sample images." delegate:nil cancelButtonTitle:@"Kay lol" otherButtonTitles:nil];
-			[alert show];
-      [alert release];
-			// Ask flickr for images.
-			/*
-			flickrContext = [[OFFlickrAPIContext alloc] initWithAPIKey:flickrAPIKey
-														  sharedSecret:flickrAPISecret];
-			interestingnessRequest = [[OFFlickrAPIRequest alloc] initWithAPIContext:flickrContext];
-			interestingnessRequest.delegate = self;
-			[interestingnessRequest callAPIMethodWithGET:@"flickr.interestingness.getList" arguments:nil];
-			 */
-		} else if (buttonIndex == 1) {
-			// Use sample images, but load them all at once.
-			NSString *imageName;
-			for (int i=0; i < 30; i++) {
-				imageName = [[NSString alloc] initWithFormat:@"%d.jpg", i];
-				[(AFOpenFlowView *)self.view setImage:[UIImage imageNamed:imageName] forIndex:i];
-				[imageName release];
-			}
-		} else if (buttonIndex == 2) {
-			// Use sample images.
-		}
-		[(AFOpenFlowView *)self.view setNumberOfImages:30];
-	}
-}
-
 - (void)imageDidLoad:(NSArray *)arguments {
 	UIImage *loadedImage = (UIImage *)[arguments objectAtIndex:0];
 	NSNumber *imageIndex = (NSNumber *)[arguments objectAtIndex:1];
 
 	// Only resize our images if they are coming from Flickr (samples are already scaled).
 	// Resize the image on the main thread (UIKit is not thread safe).
-	if (interestingnessRequest)
-		loadedImage = [loadedImage cropCenterAndScaleImageToSize:CGSizeMake(225, 225)];
-
 	[(AFOpenFlowView *)self.view setImage:loadedImage forIndex:[imageIndex intValue]];
 }
 
@@ -192,29 +101,12 @@
 - (void)openFlowView:(AFOpenFlowView *)openFlowView requestImageForIndex:(int)index {
 	AFGetImageOperation *getImageOperation = [[AFGetImageOperation alloc] initWithIndex:index viewController:self];
 
-	if (interestingnessRequest) {
-		// We're getting our images from the Flickr API.
-		NSDictionary *photoDictionary = [[interestingPhotosDictionary valueForKeyPath:@"photos.photo"] objectAtIndex:index];
-		NSURL *photoURL = [flickrContext photoSourceURLFromDictionary:photoDictionary size:OFFlickrMediumSize];
-		getImageOperation.imageURL = photoURL;
-	}
 
 	[loadImagesOperationQueue addOperation:getImageOperation];
 	[getImageOperation release];
 }
 
-//- (void)openFlowView:(AFOpenFlowView *)openFlowView selectionDidChange:(int)index {
-//	NSLog(@"Cover Flow selection did change to %d", index);
-//}
-//- (void)openFlowView:(AFOpenFlowView *)openFlowView didTap:(int)index {
-//  flipView.text = @"O hai";
-//  flipView.backgroundColor = [UIColor cyanColor];
-//  flipView.textAlignment = UITextAlignmentCenter;
-//  CGRect newFrame = openFlowView.selectedCoverView.frame;
-//  newFrame.size.height = 250;
-//  newFrame.size.width = 250;
-//  flipView.frame = newFrame;
-//  [openFlowView flipSelectedToView];
-//  [flipView release];
-//}
 @end
+
+
+

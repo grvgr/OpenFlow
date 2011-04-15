@@ -51,11 +51,11 @@ const static CGFloat kReflectionFraction = 0.85;
 	NSLog(@"setUpInitialState");
 #endif
 	
-	// Set up the default image for the coverflow.
-	self.defaultImage = [self.dataSource defaultImage];
+
 
 	// Create data holders for onscreen & offscreen covers & UIImage objects.
 	coverImages = [[NSMutableDictionary alloc] init];
+	coverItems = [[NSMutableDictionary alloc] init ];
 	coverImageHeights = [[NSMutableDictionary alloc] init];
 	offscreenCovers = [[NSMutableSet alloc] init];
 	onscreenCovers = [[NSMutableDictionary alloc] init];
@@ -112,15 +112,16 @@ const static CGFloat kReflectionFraction = 0.85;
 	NSLog(@"updateCoverImage");
 #endif
 	NSNumber *coverNumber = [NSNumber numberWithInt:aCover.number];
-	UIImage *coverImage = (UIImage *)[coverImages objectForKey:coverNumber];
-	if (coverImage) {
-		NSNumber *coverImageHeightNumber = (NSNumber *)[coverImageHeights objectForKey:coverNumber];
-		if (coverImageHeightNumber)
-			[aCover setImage:coverImage originalImageHeight:[coverImageHeightNumber floatValue] reflectionFraction:kReflectionFraction];
-	} else {
-		[aCover setImage:defaultImage originalImageHeight:defaultImageHeight reflectionFraction:kReflectionFraction];
-		[self.dataSource openFlowView:self requestImageForIndex:aCover.number];
-	}
+	//UIImage *coverImage = (UIImage *)[coverImages objectForKey:coverNumber];
+	AFViewItem *coverItem = (AFViewItem *)[coverItems objectForKey:coverNumber];
+//	if (coverImage) {
+//		NSNumber *coverImageHeightNumber = (NSNumber *)[coverImageHeights objectForKey:coverNumber];
+//		if (coverImageHeightNumber)
+//			[aCover setImage:coverImage originalImageHeight:[coverImageHeightNumber floatValue] reflectionFraction:kReflectionFraction];
+//	} 
+	if (coverItem) {
+		[aCover updateViewItemAndUpdateImage:coverItem];
+	} 
 }
 
 - (AFItemView *)dequeueReusableCover {
@@ -210,7 +211,7 @@ const static CGFloat kReflectionFraction = 0.85;
 
 
 @implementation AFOpenFlowView
-@synthesize dataSource, viewDelegate, numberOfImages, defaultImage, selectedCoverView;
+@synthesize dataSource, viewDelegate, numberOfImages, selectedCoverView;
 
 #define COVER_BUFFER 7
 
@@ -237,10 +238,11 @@ const static CGFloat kReflectionFraction = 0.85;
 #ifdef DEBUG
 	NSLog(@"dealloc");
 #endif
-	[defaultImage release];
+
 	[scrollView release];
 
 	[coverImages release];
+	[coverItems release];
 	[coverImageHeights release];
 	[offscreenCovers removeAllObjects];
 	[offscreenCovers release];
@@ -289,31 +291,22 @@ const static CGFloat kReflectionFraction = 0.85;
 	[self centerOnSelectedCover:NO];
 }
 
-- (void)setDefaultImage:(UIImage *)newDefaultImage {
-#ifdef DEBUG
-	NSLog(@"set default images");
-#endif
-	[defaultImage release];
-	defaultImageHeight = newDefaultImage.size.height;
-	defaultImage = [[newDefaultImage addImageReflection:kReflectionFraction] retain];
+- (void)setImage:(UIImage *)image forIndex:(int)index {
+
+	// Create a reflection for this image.
+//	UIImage *imageWithReflection = [image addImageReflection:kReflectionFraction];
+//	NSNumber *coverNumber = [NSNumber numberWithInt:index];
+//	[coverImages setObject:imageWithReflection forKey:coverNumber];
+//	[coverImageHeights setObject:[NSNumber numberWithFloat:image.size.height] forKey:coverNumber];
 }
 
-- (void)setImage:(UIImage *)image forIndex:(int)index {
-#ifdef DEBUG
-	NSLog(@"set image");
-#endif
-	// Create a reflection for this image.
-	UIImage *imageWithReflection = [image addImageReflection:kReflectionFraction];
+- (void)setViewItem:(AFViewItem*) viewItem forIndex:(int)index{
+	#ifdef DEBUG
+	   NSLog(@"set view item %d", index);
+	#endif
+	
 	NSNumber *coverNumber = [NSNumber numberWithInt:index];
-	[coverImages setObject:imageWithReflection forKey:coverNumber];
-	[coverImageHeights setObject:[NSNumber numberWithFloat:image.size.height] forKey:coverNumber];
-
-	// If this cover is onscreen, set its image and call layoutCover.
-	AFItemView *aCover = (AFItemView *)[onscreenCovers objectForKey:[NSNumber numberWithInt:index]];
-	if (aCover) {
-		[aCover setImage:imageWithReflection originalImageHeight:image.size.height reflectionFraction:kReflectionFraction];
-		[self layoutCover:aCover selectedCover:selectedCoverView.number animated:NO];
-	}
+	[coverItems setObject:viewItem forKey:coverNumber];
 }
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
@@ -396,15 +389,8 @@ const static CGFloat kReflectionFraction = 0.85;
         if([[event allTouches] count]==1) {
             UITouch *touch = [[event allTouches] anyObject];
             if ([touch tapCount] == 1) {
-//                if ([self.viewDelegate respondsToSelector:@selector(openFlowView:didTap:)])
-//                    [self.viewDelegate openFlowView:self didTap:selectedCoverView.number];
 				[self flipSelectedToView];
            } 
-// 				else if ([touch tapCount] == 2) {
-//                if ([self.viewDelegate respondsToSelector:@selector(openFlowView:didDoubleTap:)])
-//                    [self.viewDelegate openFlowView:self didDoubleTap:selectedCoverView.number];
-//            }
-
         }
     } 
 	else {
@@ -561,38 +547,8 @@ const static CGFloat kReflectionFraction = 0.85;
 #endif
 	[selectedCoverView flipView];
 	flipViewShown = [[NSMutableDictionary alloc] init];
-	// Save selected view state before animation
-//	flipViewShown = [[NSMutableDictionary alloc] init];
 	[flipViewShown setValue:selectedCoverView forKey:@"imageView"];
-//	[flipViewShown setValue:flipsideView forKey:@"flipsideView"];
-//
-//	CGRect flippedViewFrame = CGRectMake(
-//										 (flippedContainerView.frame.size.width-flipsideView.frame.size.width)/2,
-//										 (flippedContainerView.frame.size.height-flipsideView.frame.size.height)/2,
-//										 flipsideView.frame.size.width,
-//										 flipsideView.frame.size.height);
-//	flipsideView.frame = flippedViewFrame;
-//
-//	double animationDuration = 0.8;
-//
-//	// Animate flip of open flow image out of view
-//	[UIView beginAnimations:nil context:NULL];
-//	[UIView setAnimationDuration:animationDuration];
-//	[UIView setAnimationTransition:UIViewAnimationTransitionFlipFromLeft
-//						   forView:selectedCoverView
-//							 cache:YES];
-//	[selectedCoverView.imageView removeFromSuperview];
-//	[UIView commitAnimations];
-//
-//	// Animate flip of flipped view into view
-//	[UIView beginAnimations:nil context:NULL];
-//	[UIView setAnimationDuration:animationDuration];
-//	[UIView setAnimationTransition:UIViewAnimationTransitionFlipFromLeft
-//						   forView:flippedContainerView
-//							 cache:YES];
-//	[flippedContainerView addSubview:flipsideView];
-//	[UIView commitAnimations];
-
+	
 }
 
 - (void)dismissFlippedSelection {
@@ -600,32 +556,7 @@ const static CGFloat kReflectionFraction = 0.85;
 	NSLog(@"dismiss flipped selection");
 #endif
 	AFItemView *restoredImageView = [flipViewShown valueForKey:@"imageView"];
-	[restoredImageView flipView];
-//	UIView *flipsideView = [flipViewShown valueForKey:@"flipsideView"];
-//
-//	double animationDuration = 0.8;
-//
-//	// Animate flip of flipped view out of view
-//	[UIView beginAnimations:nil context:NULL];
-//	[UIView setAnimationDuration:animationDuration];
-//	[UIView setAnimationTransition:UIViewAnimationTransitionFlipFromRight
-//						   forView:flippedContainerView
-//							 cache:YES];
-//	[flipsideView removeFromSuperview];
-//	[UIView commitAnimations];
-//
-//	// Animate flip of image view back into view
-//	[UIView beginAnimations:nil context:NULL];
-//	[UIView setAnimationDuration:animationDuration];
-//	[UIView setAnimationTransition:UIViewAnimationTransitionFlipFromRight
-//						   forView:selectedCoverView
-//							 cache:YES];
-//	[selectedCoverView addSubview:restoredImageView];
-//	[UIView setAnimationDelegate:self];
-//	[UIView setAnimationDidStopSelector:@selector(dismissFlippedAnimationDidStop:finished:context:)];
-//	[UIView commitAnimations];
-
-	
+	[restoredImageView flipView];	
 	flipViewShown = nil;
 }
 

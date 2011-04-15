@@ -36,9 +36,10 @@
 	NSMutableSet					*offscreenCovers;
 	NSMutableDictionary				*onscreenCovers;
 	NSMutableDictionary				*coverImages;
+	NSMutableDictionary             *coverItems;
 	NSMutableDictionary				*coverImageHeights;
-	UIImage							*defaultImage;
-	CGFloat							defaultImageHeight;
+
+
 
 	UIScrollView					*scrollView;
 	int								lowerVisibleCover;
@@ -65,7 +66,6 @@
 
 @property (nonatomic, assign) id <AFOpenFlowViewDataSource> dataSource;
 @property (nonatomic, assign) id <AFOpenFlowViewDelegate> viewDelegate;
-@property (nonatomic, retain) UIImage *defaultImage;
 @property int numberOfImages;
 @property (nonatomic, retain, readonly) AFItemView *selectedCoverView;
 
@@ -74,6 +74,7 @@
 - (void)setImage:(UIImage *)image forIndex:(int)index;
 - (void)flipSelectedToView;
 - (void)dismissFlippedSelection;
+- (void)setViewItem:(AFViewItem*) viewItem forIndex:(int)index;
 
 @end
 
@@ -88,5 +89,4 @@
 
 @protocol AFOpenFlowViewDataSource <NSObject>
 - (void)openFlowView:(AFOpenFlowView *)openFlowView requestImageForIndex:(int)index;
-- (UIImage *)defaultImage;
 @end

@@ -30,7 +30,7 @@
 @implementation AFItemView
 @synthesize number, frontView, horizontalPosition, verticalPosition, flipped, selected;
 
-- (id)initWithFrame:(CGRect)frame {
+- (AFItemView *)initWithFrame:(CGRect)frame {
 	if (self == [super initWithFrame:frame]) {
 		self.opaque = YES;
 		self.backgroundColor = NULL;
@@ -48,12 +48,32 @@
 }
 
 - (void)setImage:(UIImage *)newImage originalImageHeight:(CGFloat)imageHeight reflectionFraction:(CGFloat)reflectionFraction {
+	
 	[frontView setImage:newImage];
 	verticalPosition = imageHeight * reflectionFraction / 2;
 	originalImageHeight = imageHeight;
 	self.frame = CGRectMake(0, 0, newImage.size.width, newImage.size.height);
 	viewImageHeight = imageHeight;
 	viewImageWidth = newImage.size.width;
+	
+}
+
+- (void)updateViewItemAndUpdateImage:(AFViewItem *) newViewItem {
+	
+	if ( viewItem !=nil)
+		[viewItem release];
+	
+	viewItem = newViewItem;
+	
+	if ( frontView != nil)
+	{
+		[frontView removeFromSuperview];
+	}
+	
+	frontView = [viewItem getFrontView];
+	verticalPosition = ((frontView.frame.size.height / 1.85) * 0.85 ) / 2;
+	[self addSubview:frontView];
+	[self setFrame:frontView.frame];
 	
 }
 
