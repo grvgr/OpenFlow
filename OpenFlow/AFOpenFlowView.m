@@ -43,14 +43,10 @@
 
 const static CGFloat kReflectionFraction = 0.85;
 
-#define DEBUG 
 
 - (void)setUpInitialState {
 	
-#ifdef DEBUG
-	NSLog(@"setUpInitialState");
-#endif
-	
+
 
 
 	// Create data holders for onscreen & offscreen covers & UIImage objects.
@@ -95,9 +91,7 @@ const static CGFloat kReflectionFraction = 0.85;
 }
 
 - (AFItemView *)coverForIndex:(int)coverIndex {
-#ifdef DEBUG
-	NSLog(@"coverForIndex");
-#endif
+
 	AFItemView *coverView = [self dequeueReusableCover];
 	if (!coverView)
 		coverView = [[[AFItemView alloc] initWithFrame:CGRectZero] autorelease];
@@ -108,12 +102,11 @@ const static CGFloat kReflectionFraction = 0.85;
 }
 
 - (void)updateCoverImage:(AFItemView *)aCover {
-#ifdef DEBUG
-	NSLog(@"updateCoverImage");
-#endif
+	NSLog(@"Entered update cover");
 	NSNumber *coverNumber = [NSNumber numberWithInt:aCover.number];
 	//UIImage *coverImage = (UIImage *)[coverImages objectForKey:coverNumber];
 	AFViewItem *coverItem = (AFViewItem *)[coverItems objectForKey:coverNumber];
+	
 //	if (coverImage) {
 //		NSNumber *coverImageHeightNumber = (NSNumber *)[coverImageHeights objectForKey:coverNumber];
 //		if (coverImageHeightNumber)
@@ -122,12 +115,11 @@ const static CGFloat kReflectionFraction = 0.85;
 	if (coverItem) {
 		[aCover updateViewItemAndUpdateImage:coverItem];
 	} 
+	NSLog(@"%d cover item", coverItems.count);
 }
 
 - (AFItemView *)dequeueReusableCover {
-#ifdef DEBUG
-	NSLog(@"dequeueReusableCover");
-#endif
+
 	AFItemView *aCover = [offscreenCovers anyObject];
 	if (aCover) {
 		[[aCover retain] autorelease];
@@ -137,9 +129,6 @@ const static CGFloat kReflectionFraction = 0.85;
 }
 
 - (void)layoutCover:(AFItemView *)aCover selectedCover:(int)selectedIndex animated:(Boolean)animated  {
-#ifdef DEBUG
-	NSLog(@"layoutCover");
-#endif	
 	int coverNumber = aCover.number;
 	CATransform3D newTransform;
 	CGFloat newZPosition = SIDE_COVER_ZPOSITION;
@@ -176,10 +165,7 @@ const static CGFloat kReflectionFraction = 0.85;
 }
 
 - (void)layoutCovers:(int)selected fromCover:(int)lowerBound toCover:(int)upperBound {
-#ifdef DEBUG
-	NSLog(@"Layout covers");
-	NSLog(@"** %d %d", lowerBound, upperBound);
-#endif
+
 
 	AFItemView *cover;
 	NSNumber *coverNumber;
@@ -189,12 +175,11 @@ const static CGFloat kReflectionFraction = 0.85;
 		[coverNumber release];
 		[self layoutCover:cover selectedCover:selected animated:YES];
 	}
+	NSLog(@"%d onscreenCovers", onscreenCovers.count);
 }
 
 - (AFItemView *)findCoverOnscreen:(CALayer *)targetLayer {
-#ifdef DEBUG
-	NSLog(@"find covers on screen");
-#endif
+
 	// See if this layer is one of our covers.
 	NSEnumerator *coverEnumerator = [onscreenCovers objectEnumerator];
 	AFItemView *aCover = (AFItemView *)[coverEnumerator nextObject];
@@ -213,19 +198,13 @@ const static CGFloat kReflectionFraction = 0.85;
 @implementation AFOpenFlowView
 @synthesize dataSource, viewDelegate, numberOfImages, selectedCoverView;
 
-#define COVER_BUFFER 7
+#define COVER_BUFFER 6
 
 - (void)awakeFromNib {
-#ifdef DEBUG
-	NSLog(@"awake from nib");
-#endif
 	[self setUpInitialState];
 }
 
 - (id)initWithFrame:(CGRect)frame {
-#ifdef DEBUG
-	NSLog(@"init with frame");
-#endif
 	self = [super initWithFrame:frame];
 	if ( self ) {
 		[self setUpInitialState];
@@ -235,9 +214,7 @@ const static CGFloat kReflectionFraction = 0.85;
 }
 
 - (void)dealloc {
-#ifdef DEBUG
-	NSLog(@"dealloc");
-#endif
+
 
 	[scrollView release];
 
@@ -256,9 +233,6 @@ const static CGFloat kReflectionFraction = 0.85;
 }
 
 - (void)setBounds:(CGRect)newSize {
-#ifdef DEBUG
-	NSLog(@"set bounds");
-#endif
 	[super setBounds:newSize];
 
 	halfScreenWidth = self.bounds.size.width / 2;
@@ -272,10 +246,6 @@ const static CGFloat kReflectionFraction = 0.85;
 }
 
 - (void)setNumberOfImages:(int)newNumberOfImages {
-#ifdef DEBUG
-	NSLog(@"set number of images");
-	NSLog(@"*** canvas size : %f %f", newNumberOfImages * COVER_SPACING + self.bounds.size.width, self.bounds.size.height);
-#endif
 	numberOfImages = newNumberOfImages;
 	scrollView.contentSize = CGSizeMake(newNumberOfImages * COVER_SPACING + self.bounds.size.width, self.bounds.size.height);
 	
@@ -301,18 +271,12 @@ const static CGFloat kReflectionFraction = 0.85;
 }
 
 - (void)setViewItem:(AFViewItem*) viewItem forIndex:(int)index{
-	#ifdef DEBUG
-	   NSLog(@"set view item %d", index);
-	#endif
-	
+
 	NSNumber *coverNumber = [NSNumber numberWithInt:index];
 	[coverItems setObject:viewItem forKey:coverNumber];
 }
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
-#ifdef DEBUG
-	NSLog(@"touches begin");
-#endif
 	CGPoint startPoint = [[touches anyObject] locationInView:self];
 	isDraggingACover = NO;
 
@@ -337,9 +301,7 @@ const static CGFloat kReflectionFraction = 0.85;
 }
 
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
-#ifdef DEBUG
-	NSLog(@"touches moved");
-#endif
+
 	isSingleTap = NO;
 	isDoubleTap = NO;
 
@@ -363,9 +325,7 @@ const static CGFloat kReflectionFraction = 0.85;
 }
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
-#ifdef DEBUG
-	NSLog(@"touches ended");
-#endif
+
 	if (flipViewShown) {
 		if (isSingleTap) {
 			[self dismissFlippedSelection];
@@ -405,17 +365,13 @@ const static CGFloat kReflectionFraction = 0.85;
 }
 
 - (void)centerOnSelectedCover:(BOOL)animated {
-#ifdef DEBUG
-	NSLog(@"center on selected cover");
-#endif
+
 	CGPoint selectedOffset = CGPointMake(COVER_SPACING * selectedCoverView.number, 0);
 	[scrollView setContentOffset:selectedOffset animated:animated];
 }
 
 - (void)setSelectedCover:(int)newSelectedCover {
-#ifdef DEBUG
-	NSLog(@"set selected cover");
-#endif
+
 	if (selectedCoverView && (newSelectedCover == selectedCoverView.number))
 		return;
 
@@ -433,7 +389,7 @@ const static CGFloat kReflectionFraction = 0.85;
 			[self updateCoverImage:cover];
 			[scrollView.layer addSublayer:cover.layer];
 			//[scrollView addSubview:cover];
-			[self layoutCover:cover selectedCover:newSelectedCover animated:NO];
+			[self layoutCover:cover selectedCover:newSelectedCover animated:YES];
 		}
 
 		lowerVisibleCover = newLowerBound;
@@ -542,9 +498,7 @@ const static CGFloat kReflectionFraction = 0.85;
 }
 
 - (void)flipSelectedToView{
-#ifdef DEBUG
-	NSLog(@"flip selected to view");
-#endif
+
 	[selectedCoverView flipView];
 	flipViewShown = [[NSMutableDictionary alloc] init];
 	[flipViewShown setValue:selectedCoverView forKey:@"imageView"];
@@ -552,26 +506,20 @@ const static CGFloat kReflectionFraction = 0.85;
 }
 
 - (void)dismissFlippedSelection {
-#ifdef DEBUG
-	NSLog(@"dismiss flipped selection");
-#endif
+
 	AFItemView *restoredImageView = [flipViewShown valueForKey:@"imageView"];
 	[restoredImageView flipView];	
 	flipViewShown = nil;
 }
 
 - (void)layoutCoverAnimationDidStop:(NSString *)animationID finished:(NSNumber *)finished context:(void *)context {
-#ifdef DEBUG
-	NSLog(@"layoutCoverAnimationDidStop");
-#endif
+
     if ([self.viewDelegate respondsToSelector:@selector(openFlowViewAnimationDidEnd:)])
         [self.viewDelegate openFlowViewAnimationDidEnd:self];
 }
 
 - (void)dismissFlippedAnimationDidStop:(NSString *)animationID finished:(NSNumber *)finished context:(void *)context {
-#ifdef DEBUG
-	NSLog(@"layoutCoverAnimationDidStop");
-#endif
+
 	// Same as layoutCoverAnimationDidStop: for now
     if ([self.viewDelegate respondsToSelector:@selector(openFlowViewAnimationDidEnd:)])
         [self.viewDelegate openFlowViewAnimationDidEnd:self];

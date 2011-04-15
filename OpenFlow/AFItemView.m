@@ -37,11 +37,11 @@
 		verticalPosition = 0;
 		horizontalPosition = 0;
 		
-			// Image View
-		frontView = [[UIImageView alloc] initWithFrame:frame];
-		frontView.opaque = YES;
-		[self addSubview:frontView];
-		flipped = FALSE;
+//		// Image View
+//		frontView = [[UIImageView alloc] initWithFrame:frame];
+//		frontView.opaque = YES;
+//		[self addSubview:frontView];
+//		flipped = FALSE;
 	}
 	
 	return self;
@@ -49,19 +49,16 @@
 
 - (void)setImage:(UIImage *)newImage originalImageHeight:(CGFloat)imageHeight reflectionFraction:(CGFloat)reflectionFraction {
 	
-	[frontView setImage:newImage];
-	verticalPosition = imageHeight * reflectionFraction / 2;
-	originalImageHeight = imageHeight;
-	self.frame = CGRectMake(0, 0, newImage.size.width, newImage.size.height);
-	viewImageHeight = imageHeight;
-	viewImageWidth = newImage.size.width;
+//	[frontView setImage:newImage];
+//	verticalPosition = imageHeight * reflectionFraction / 2;
+//	originalImageHeight = imageHeight;
+//	self.frame = CGRectMake(0, 0, newImage.size.width, newImage.size.height);
+//	viewImageHeight = imageHeight;
+//	viewImageWidth = newImage.size.width;
 	
 }
 
 - (void)updateViewItemAndUpdateImage:(AFViewItem *) newViewItem {
-	
-	if ( viewItem !=nil)
-		[viewItem release];
 	
 	viewItem = newViewItem;
 	
@@ -82,22 +79,7 @@
 	number = newNumber;
 }
 
-- (CGSize)calculateNewSize:(CGSize)baseImageSize boundingBox:(CGSize)boundingBox {
-	CGFloat boundingRatio = boundingBox.width / boundingBox.height;
-	CGFloat originalImageRatio = baseImageSize.width / baseImageSize.height;
-	
-	CGFloat newWidth;
-	CGFloat newHeight;
-	if (originalImageRatio > boundingRatio) {
-		newWidth = boundingBox.width;
-		newHeight = boundingBox.width * baseImageSize.height / baseImageSize.width;
-	} else {
-		newHeight = boundingBox.height;
-		newWidth = boundingBox.height * baseImageSize.width / baseImageSize.height;
-	}
-	
-	return CGSizeMake(newWidth, newHeight);
-}
+
 
 
 - (void)setFrame:(CGRect)newFrame {
@@ -115,15 +97,18 @@
 
 - (BOOL) createbackView
 {
-	backView = [[UILabel alloc] init];
-	[backView setText:@"O hai"];
-	backView.backgroundColor = [UIColor cyanColor];
-	[backView setTextAlignment:UITextAlignmentCenter];
-	CGRect newFrame = self.superview.frame;
-	newFrame.size.height = viewImageHeight;
-	newFrame.size.width = viewImageWidth;
-	backView.frame = newFrame;
-	return TRUE;
+	
+	if ( backView = [viewItem getBackView])
+		return TRUE;
+//	backView = [[UILabel alloc] init];
+//	[backView setText:@"O hai"];
+//	backView.backgroundColor = [UIColor cyanColor];
+//	[backView setTextAlignment:UITextAlignmentCenter];
+//	CGRect newFrame = self.superview.frame;
+//	newFrame.size.height = 200;
+//	newFrame.size.width = 200;
+//	backView.frame = newFrame;
+	return FALSE;
 }
 
 #pragma mark Animation
@@ -198,12 +183,27 @@
 		[UIView commitAnimations];
 		
 		flipped = FALSE;
-		[backView release];
-		backView = nil;
+}
+	
+	
+	
+}
+
+- (CGSize)calculateNewSize:(CGSize)baseImageSize boundingBox:(CGSize)boundingBox {
+	CGFloat boundingRatio = boundingBox.width / boundingBox.height;
+	CGFloat originalImageRatio = baseImageSize.width / baseImageSize.height;
+	
+	CGFloat newWidth;
+	CGFloat newHeight;
+	if (originalImageRatio > boundingRatio) {
+		newWidth = boundingBox.width;
+		newHeight = boundingBox.width * baseImageSize.height / baseImageSize.width;
+	} else {
+		newHeight = boundingBox.height;
+		newWidth = boundingBox.height * baseImageSize.width / baseImageSize.height;
 	}
 	
-	
-	
+	return CGSizeMake(newWidth, newHeight);
 }
 
 

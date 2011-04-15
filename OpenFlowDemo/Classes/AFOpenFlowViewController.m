@@ -46,23 +46,20 @@
     NSString *imageName;
 	AFDemoViewItem *demoViewItem;
 	
-	//Replace setImage with setViewItem
-	//AFViewItem to provide implementation for front and back views
+		//Replace setImage with setViewItem
+		//AFViewItem to provide implementation for front and back views
 	
     for (int i=0; i < 30; i++) {
         imageName = [[NSString alloc] initWithFormat:@"%d.jpg", i];
-        [(AFOpenFlowView *)self.view setImage:[UIImage imageNamed:imageName] forIndex:i];
-        [imageName release];
+			//[(AFOpenFlowView *)self.view setImage:[UIImage imageNamed:imageName] forIndex:i];
+			// Setting AFItem in AFOpenFlowView
 		
-		// Setting AFItem in AFOpenFlowView
 		demoViewItem = [[[AFDemoViewItem alloc] initWithString:imageName andInt:i] retain];
+			//[imageName release];
 		[(AFOpenFlowView*)self.view setViewItem: demoViewItem forIndex: i];
 			//[demoViewItem release];
     }
 	
-	
-
-
     [(AFOpenFlowView *)self.view setNumberOfImages:30];
     
 }
@@ -84,9 +81,9 @@
 - (void)imageDidLoad:(NSArray *)arguments {
 	UIImage *loadedImage = (UIImage *)[arguments objectAtIndex:0];
 	NSNumber *imageIndex = (NSNumber *)[arguments objectAtIndex:1];
-
-	// Only resize our images if they are coming from Flickr (samples are already scaled).
-	// Resize the image on the main thread (UIKit is not thread safe).
+	
+		// Only resize our images if they are coming from Flickr (samples are already scaled).
+		// Resize the image on the main thread (UIKit is not thread safe).
 	[(AFOpenFlowView *)self.view setImage:loadedImage forIndex:[imageIndex intValue]];
 }
 
@@ -100,8 +97,8 @@
 
 - (void)openFlowView:(AFOpenFlowView *)openFlowView requestImageForIndex:(int)index {
 	AFGetImageOperation *getImageOperation = [[AFGetImageOperation alloc] initWithIndex:index viewController:self];
-
-
+	
+	
 	[loadImagesOperationQueue addOperation:getImageOperation];
 	[getImageOperation release];
 }

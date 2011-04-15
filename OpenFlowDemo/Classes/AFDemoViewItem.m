@@ -27,31 +27,29 @@
 
 - (UIView *)getFrontView
 {
+	NSLog(@"%@ File", self.label);
 	if (frontView == nil){
 		frontView = [[[UIImageView alloc] initWithFrame:CGRectZero] retain] ;
 		frontView.opaque = YES;
 		
-		UIImage *imageWithReflection = [[image addImageReflection:kReflectionFactor] retain];
+		UIImage *imageWithReflection = [image addImageReflection:kReflectionFactor];
 		
 		[frontView setImage:imageWithReflection];
 		[frontView setFrame:CGRectMake(0, 0, image.size.width, imageWithReflection.size.height)];
-
 		return frontView;
 	}
 	
-	return nil;
+	return frontView;
 }
 - (UIView *)getBackView
 {
 	if ( backView == nil )
 	{
-		backView = [[UILabel alloc] init];
-		[backView setText:@"O hai"];
-		backView.backgroundColor = [UIColor cyanColor];
+		backView = [[[UILabel alloc] initWithFrame:CGRectZero] retain];
+		[backView setText:label];
+		backView.backgroundColor = [UIColor whiteColor];
 		[backView setTextAlignment:UITextAlignmentCenter];
-		CGRect newFrame = CGRectMake(0, 0, 250, 250);
-		newFrame.size.height = 250;
-		newFrame.size.width = 250;
+		CGRect newFrame = CGRectMake(0, 0, imageHeight, image.size.width);
 		backView.frame = newFrame;
 		
 	}
