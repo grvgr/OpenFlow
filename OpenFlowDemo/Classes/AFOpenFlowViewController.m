@@ -54,10 +54,10 @@
 			//[(AFOpenFlowView *)self.view setImage:[UIImage imageNamed:imageName] forIndex:i];
 			// Setting AFItem in AFOpenFlowView
 		
-		demoViewItem = [[[AFDemoViewItem alloc] initWithString:imageName andInt:i] retain];
-			//[imageName release];
+		demoViewItem = [[AFDemoViewItem alloc] initWithString:imageName andInt:i];
+        [imageName release];
 		[(AFOpenFlowView*)self.view setViewItem: demoViewItem forIndex: i];
-			//[demoViewItem release];
+        [demoViewItem release];
     }
 	
     [(AFOpenFlowView *)self.view setNumberOfImages:30];
