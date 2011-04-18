@@ -36,27 +36,10 @@
 		self.backgroundColor = NULL;
 		verticalPosition = 0;
 		horizontalPosition = 0;
-		
-//		// Image View
-//		frontView = [[UIImageView alloc] initWithFrame:frame];
-//		frontView.opaque = YES;
-//		[self addSubview:frontView];
-//		flipped = FALSE;
 	}
-	
 	return self;
 }
 
-- (void)setImage:(UIImage *)newImage originalImageHeight:(CGFloat)imageHeight reflectionFraction:(CGFloat)reflectionFraction {
-	
-//	[frontView setImage:newImage];
-//	verticalPosition = imageHeight * reflectionFraction / 2;
-//	originalImageHeight = imageHeight;
-//	self.frame = CGRectMake(0, 0, newImage.size.width, newImage.size.height);
-//	viewImageHeight = imageHeight;
-//	viewImageWidth = newImage.size.width;
-	
-}
 
 - (void)updateViewItemAndUpdateImage:(AFViewItem *) newViewItem {
 	
@@ -78,9 +61,6 @@
 	horizontalPosition = COVER_SPACING * newNumber;
 	number = newNumber;
 }
-
-
-
 
 - (void)setFrame:(CGRect)newFrame {
 	[super setFrame:newFrame];
