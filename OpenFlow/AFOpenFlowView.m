@@ -131,13 +131,13 @@ const static CGFloat kReflectionFraction = 0.85;
 	CGFloat newZPosition = SIDE_COVER_ZPOSITION;
 	CGPoint newPosition;
 
-	newPosition.x = halfScreenWidth + aCover.horizontalPosition;
+	newPosition.x = CENTER_SCREEN + aCover.horizontalPosition;
 	newPosition.y = halfScreenHeight + aCover.verticalPosition;
 	if (coverNumber < selectedIndex) {
-		newPosition.x -= CENTER_COVER_OFFSET;
+		newPosition.x -= CENTER_COVER_OFFSET + 250;
 		newTransform = leftTransform;
 	} else if (coverNumber > selectedIndex) {
-		newPosition.x += CENTER_COVER_OFFSET;
+		newPosition.x += CENTER_COVER_OFFSET ;
 		newTransform = rightTransform;
 	} else {
 		newZPosition = 0;
@@ -230,9 +230,9 @@ const static CGFloat kReflectionFraction = 0.85;
 }
 
 - (void)setBounds:(CGRect)newSize {
-    NSLog(@"%@",newSize);
 	[super setBounds:newSize];
 
+    NSLog(@"%@",[self class]);
 	halfScreenWidth = self.bounds.size.width / 2;
 	halfScreenHeight = self.bounds.size.height / 2;
 
@@ -364,7 +364,7 @@ const static CGFloat kReflectionFraction = 0.85;
 
 - (void)centerOnSelectedCover:(BOOL)animated {
 
-	CGPoint selectedOffset = CGPointMake(COVER_SPACING * selectedCoverView.number, 0);
+	CGPoint selectedOffset = CGPointMake((COVER_SPACING * selectedCoverView.number)+100, 0);
 	[scrollView setContentOffset:selectedOffset animated:animated];
 }
 
