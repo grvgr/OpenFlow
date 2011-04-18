@@ -32,7 +32,6 @@
 - (void)setUpInitialState;
 - (AFItemView *)coverForIndex:(int)coverIndex;
 - (void)updateCoverImage:(AFItemView *)aCover;
-- (AFItemView *)dequeueReusableCover;
 - (void)layoutCovers:(int)selected fromCover:(int)lowerBound toCover:(int)upperBound;
 - (void)layoutCover:(AFItemView *)aCover selectedCover:(int)selectedIndex animated:(Boolean)animated;
 - (AFItemView *)findCoverOnscreen:(CALayer *)targetLayer;
@@ -45,12 +44,7 @@
 
 
 - (void)setUpInitialState {
-	
-	// Create data holders for onscreen & offscreen covers & UIImage objects.
-	coverImages = [[NSMutableDictionary alloc] init];
 	coverItems = [[NSMutableDictionary alloc] init ];
-	coverImageHeights = [[NSMutableDictionary alloc] init];
-	offscreenCovers = [[NSMutableSet alloc] init];
 	onscreenCovers = [[NSMutableDictionary alloc] init];
     
 	scrollView = [[UIScrollView alloc] initWithFrame:self.frame];
@@ -88,13 +82,8 @@
 }
 
 - (AFItemView *)coverForIndex:(int)coverIndex {
-
-	AFItemView *coverView = [self dequeueReusableCover];
-	if (!coverView)
-		coverView = [[[AFItemView alloc] initWithFrame:CGRectZero] autorelease];
-
+	AFItemView *coverView = [[[AFItemView alloc] initWithFrame:CGRectZero] autorelease];
 	coverView.number = coverIndex;
-
 	return coverView;
 }
 
@@ -108,15 +97,6 @@
 	NSLog(@"%d cover item", coverItems.count);
 }
 
-- (AFItemView *)dequeueReusableCover {
-
-	AFItemView *aCover = [offscreenCovers anyObject];
-	if (aCover) {
-		[[aCover retain] autorelease];
-		[offscreenCovers removeObject:aCover];
-	}
-	return aCover;
-}
 
 - (void)layoutCover:(AFItemView *)aCover selectedCover:(int)selectedIndex animated:(Boolean)animated  {
 	int coverNumber = aCover.number;
@@ -202,16 +182,8 @@
 }
 
 - (void)dealloc {
-
-
 	[scrollView release];
-
-	[coverImages release];
 	[coverItems release];
-	[coverImageHeights release];
-	[offscreenCovers removeAllObjects];
-	[offscreenCovers release];
-
 	[onscreenCovers removeAllObjects];
 	[onscreenCovers release];
 
@@ -222,28 +194,17 @@
 
 - (void)setBounds:(CGRect)newSize {
 	[super setBounds:newSize];
-
-    NSLog(@"%@",[self class]);
 	halfScreenWidth = self.bounds.size.width / 2;
 	halfScreenHeight = self.bounds.size.height / 2;
-
-	int lowerBound = MAX(-1, selectedCoverView.number - COVER_BUFFER);
-	int upperBound = MIN(self.numberOfImages - 1, selectedCoverView.number + COVER_BUFFER);
-
-	[self layoutCovers:selectedCoverView.number fromCover:lowerBound toCover:upperBound];
+	[self layoutCovers:selectedCoverView.number fromCover:0 toCover:30];
 	[self centerOnSelectedCover:NO];
 }
 
 - (void)setNumberOfImages:(int)newNumberOfImages {
 	numberOfImages = newNumberOfImages;
 	scrollView.contentSize = CGSizeMake(newNumberOfImages * COVER_SPACING + self.bounds.size.width, self.bounds.size.height);
-	
-	
-	int lowerBound = MAX(0, selectedCoverView.number - COVER_BUFFER);
-	int upperBound = MIN(self.numberOfImages - 1, selectedCoverView.number + COVER_BUFFER);
-
 	if (selectedCoverView)
-		[self layoutCovers:selectedCoverView.number fromCover:lowerBound toCover:upperBound];
+		[self layoutCovers:selectedCoverView.number fromCover:0 toCover:newNumberOfImages];
 	else
 		[self setSelectedCover:0];
 
