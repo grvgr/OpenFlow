@@ -49,7 +49,7 @@
 	
 	AFItemView						*selectedCoverView;
 
-	NSDictionary					*flipViewShown;
+	AFItemView                      *flipViewShown;
 	UIView							*flippedContainerView;
 	
 	CATransform3D leftTransform, rightTransform;

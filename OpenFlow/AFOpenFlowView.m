@@ -340,15 +340,13 @@
 - (void)flipSelectedToView{
 
 	[selectedCoverView flipView];
-	flipViewShown = [[NSMutableDictionary alloc] init];
-	[flipViewShown setValue:selectedCoverView forKey:@"imageView"];
+    flipViewShown = selectedCoverView;
 	
 }
 
 - (void)dismissFlippedSelection {
 
-	AFItemView *restoredImageView = [flipViewShown valueForKey:@"imageView"];
-	[restoredImageView flipView];	
+	[flipViewShown flipView];	
 	flipViewShown = nil;
 }
 
