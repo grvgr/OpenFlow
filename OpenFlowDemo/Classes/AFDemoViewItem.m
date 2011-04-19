@@ -16,42 +16,32 @@
 
 - (AFDemoViewItem*) initWithString:(NSString*) string andInt:(int) num
 {
-	
-	self.label = string;
-	self.number = num;
-	image = [[UIImage imageNamed:label] retain];
-	kReflectionFactor = 0.85;;
-	imageHeight = image.size.height;
+	self = [super init];
+    if (self) {
+        self.label = string;
+        self.number = num;
+        image = [[UIImage imageNamed:label] retain];
+    }
 	return self;
 }
 
 - (UIView *)getFrontView
 {
-	NSLog(@"%@ File", self.label);
 	if (frontView == nil){
-		frontView = [[[UIImageView alloc] initWithFrame:CGRectZero] retain] ;
-		frontView.opaque = YES;
-		
-		UIImage *imageWithReflection = [image addImageReflection:kReflectionFactor];
-		
-		[frontView setImage:imageWithReflection];
-		[frontView setFrame:CGRectMake(0, 0, image.size.width, imageWithReflection.size.height)];
+        frontView = [[UIImageView alloc ] initWithFrame:CGRectMake(0, 0, image.size.width, image.size.height)];
+		[frontView setImage:image];
 		return frontView;
 	}
-	
 	return frontView;
 }
 - (UIView *)getBackView
 {
 	if ( backView == nil )
 	{
-		backView = [[[UILabel alloc] initWithFrame:CGRectZero] retain];
+		backView = [[[UILabel alloc] initWithFrame:CGRectMake(0, 0, image.size.height, image.size.width)] retain];
 		[backView setText:label];
 		backView.backgroundColor = [UIColor whiteColor];
 		[backView setTextAlignment:UITextAlignmentCenter];
-		CGRect newFrame = CGRectMake(0, 0, imageHeight, image.size.width);
-		backView.frame = newFrame;
-		
 	}
 	return backView;
 }
